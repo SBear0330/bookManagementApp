@@ -5,10 +5,22 @@
     </head>
     <body>
         <h1>안녕하덕! 여기는 {{ library_name }}이덕!</h1>
+        <form action="" method="get">
+            <input type="text" name="q" placeholder="책 제목이나 저자 검색..." value="{{ query|default:'' }}">
+            <button type="submit">검색하덕!</button>
+        </form>
+
+        {% if not query %}
         <p>지금 우리 도서관에는 <strong>{{ book_count }}</strong>권의 책이 있덕.</p>
+        {% else %}
+        <p>총 <strong>{{ book_count }}</strong>권의 책이 검색되었덕.</p>
+        {% endif %}
+
+        <hr>
         
-        <hr> <h3>📚 도서 목록</h3>
-        <ul>
+        <h3>📚 도서 목록</h3>
+
+        <ol>
             {% for book in books %}
             <li>
                 <strong>{{ book.title }}</strong> - {{ book.author }}
@@ -19,9 +31,15 @@
                     <span style="color: red;">(대여 가능)</span>
                 {% endif %}
             </li>
+
             {% empty %}
-            <li>아직 도서관에 책이 없덕.. </li>
+                {% if query %}
+                    <p>검색어 '<strong>{{ query }}</strong>'에 맞는 책은 없덕..</p>
+                {% else %}
+                    <p>아직 도서관에 책이 없덕... <p>
+                {% endif %}
             {% endfor %}
-        </ul>
+
+        </ol>
     </body>
 </html>

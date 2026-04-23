@@ -1,16 +1,24 @@
 from django.shortcuts import render
 from .models import Book
+from django.db.models import Q
 
 # Create your views here.
 def index(request):
+    query = request.GET.get('q')
     
     all_books = Book.objects.all()
+    
+    if query:
+        all_books = all_books.filter(
+            Q(title__icontains=query) | Q(author__icontains=query)
+        )
     count = all_books.count()
     
     context = {
         'library_name': '러버덕의 비밀 서재',
         'book_count': count,
-        'books': all_books
+        'books': all_books,
+        'query': query
     }
     # 딕셔너리를 render에 'context' argument로 전달하면 loader.render_to_string이 알아서 해석하는듯? 
     # > 딕셔너리의 key와 html의 변수명을 대조하여 value로 대체
