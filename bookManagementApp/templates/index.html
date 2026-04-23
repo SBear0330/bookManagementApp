@@ -6,7 +6,22 @@
     <body>
         <h1>안녕하덕! 여기는 {{ library_name }}이덕!</h1>
         <p>지금 우리 도서관에는 <strong>{{ book_count }}</strong>권의 책이 있덕.</p>
-        <p>책의 목록은 다음과 같덕. <strong>{{ all_books }}</strong></p>
+        
+        <hr> <h3>📚 도서 목록</h3>
+        <ul>
+            {% for book in books %}
+            <li>
+                <strong>{{ book.title }}</strong> - {{ book.author }}
 
+                {% if book.borrower %}
+                    <span style="color: red;">(대여 중)</span>
+                {% else %}
+                    <span style="color: red;">(대여 가능)</span>
+                {% endif %}
+            </li>
+            {% empty %}
+            <li>아직 도서관에 책이 없덕.. </li>
+            {% endfor %}
+        </ul>
     </body>
 </html>
